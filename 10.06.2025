@@ -1,0 +1,288 @@
+
+package Connection;
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+//import com.mongodb.client.MongoIterable;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+
+public class MongoDB {
+   public static void main(String[] args) {
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+      
+      MongoDatabase database = mongoClient.getDatabase("vit");
+      
+      
+      // retrieving a collection
+      MongoCollection<Document> collection = database.getCollection("sampleCollection");
+      
+     collection.deleteOne(Filters.eq("First_Name", "Mahesh"));
+     System.out.println("Document deleted");
+     System.out.println("Documents");
+     
+     FindIterable<Document> documents = collection.find();
+     
+     for(Document document : documents) {
+    	 System.out.println(document);
+     }
+      
+      
+   }
+}
+
+OUTPUT:
+Document deleted
+Documents
+
+package Connection;
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+//import com.mongodb.client.MongoIterable;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+
+public class MongoDB {
+   public static void main(String[] args) {
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+      
+      MongoDatabase database = mongoClient.getDatabase("vit");
+      
+      
+      // retrieving a collection
+      MongoCollection<Document> collection = database.getCollection("sales");
+      
+     collection.deleteMany(Filters.eq("item", "Cappuccino"));
+     System.out.println("Document deleted");
+     System.out.println("Documents");
+     
+     FindIterable<Document> documents = collection.find();
+     
+     for(Document document : documents) {
+    	 System.out.println(document);
+     }
+      
+      
+   }
+}
+
+OUTPUT:
+Document deleted
+Documents
+Document{{_id=1, item=Americanos, price=5, size=Short, quantity=22, date=Sat Jan 15 13:30:00 IST 2022}}
+Document{{_id=3, item=Lattes, price=15, size=Grande, quantity=25, date=Sun Jan 16 14:35:00 IST 2022}}
+Document{{_id=4, item=Mochas, price=25, size=Tall, quantity=11, date=Thu Feb 17 13:30:00 IST 2022}}
+Document{{_id=5, item=Americanos, price=10, size=Grande, quantity=12, date=Sat Feb 19 02:36:00 IST 2022}}
+Document{{_id=7, item=Lattes, price=25, size=Tall, quantity=30, date=Mon Feb 21 15:38:00 IST 2022}}
+Document{{_id=8, item=Americanos, price=10, size=Grande, quantity=21, date=Tue Feb 22 19:39:00 IST 2022}}
+Document{{_id=10, item=Americanos, price=8, size=Tall, quantity=15, date=Fri Feb 25 19:39:00 IST 2022}}
+
+package Connection;
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+//import com.mongodb.client.MongoIterable;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+
+public class MongoDB {
+   public static void main(String[] args) {
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+      
+      MongoDatabase database = mongoClient.getDatabase("myDb");
+      
+      
+      // retrieving a collection
+      MongoCollection<Document> collection = database.getCollection("sampleCollection");
+      
+     
+      
+     FindIterable<Document> allDocuments = collection.find().limit(2);
+     
+     for(Document document : allDocuments) {
+    	 System.out.println(document);
+     }
+      
+      
+   }
+}
+
+OUTPUT:
+Document{{_id=6848341629aa397b4cb6c500, First_Name=Mahesh, Last_Name=Parashar, Date_Of_Birth=1990-08-21, e_mail=mahesh_parashar.123@gmail.com, phone=9034343345}}
+Document{{_id=6848341629aa397b4cb6c501, First_Name=Radhika, Last_Name=Sharma, Date_Of_Birth=1995-09-26, e_mail=radhika_sharma.123@gmail.com, phone=9000012345}}
+
+package Connection;
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+//import com.mongodb.client.MongoIterable;
+//import com.mongodb.client.model.Filters;
+//import com.mongodb.client.model.Updates;
+
+public class MongoDB {
+   public static void main(String[] args) {
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+      
+      MongoDatabase database = mongoClient.getDatabase("myDb");
+      
+      
+      // retrieving a collection
+      MongoCollection<Document> collection = database.getCollection("sampleCollection");
+      
+     
+      
+     FindIterable<Document> allDocuments = collection.find().skip(1).limit(2);
+     
+     for(Document document : allDocuments) {
+    	 System.out.println(document);
+     }
+      
+      
+   }
+}
+
+OUTPUT:
+Document{{_id=6848341629aa397b4cb6c501, First_Name=Radhika, Last_Name=Sharma, Date_Of_Birth=1995-09-26, e_mail=radhika_sharma.123@gmail.com, phone=9000012345}}
+Document{{_id=6848341629aa397b4cb6c502, First_Name=Rachel, Last_Name=Christopher, Date_Of_Birth=1990-02-16, e_mail=Rachel_Christopher.123@gmail.com, phone=9000054321}}
+
+package Connection;
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+//import com.mongodb.client.MongoIterable;
+//import com.mongodb.client.model.Filters;
+//import com.mongodb.client.model.Updates;
+
+public class MongoDB {
+   public static void main(String[] args) {
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+      
+      MongoDatabase database = mongoClient.getDatabase("myDb");
+      
+      
+      // retrieving a collection
+      MongoCollection<Document> collection = database.getCollection("sampleCollection");
+      
+     
+      
+     FindIterable<Document> allDocuments = collection.find();
+     
+     int index=0;
+     for (Document doc : allDocuments) {
+         if (index % 2 == 0) {
+             System.out.println("Remaining Document: " + doc);
+         }
+         index++;
+     }
+      
+      
+   }
+}
+
+OUTPUT:
+Remaining Document: Document{{_id=6848341629aa397b4cb6c500, First_Name=Mahesh, Last_Name=Parashar, Date_Of_Birth=1990-08-21, e_mail=mahesh_parashar.123@gmail.com, phone=9034343345}}
+Remaining Document: Document{{_id=6848341629aa397b4cb6c502, First_Name=Rachel, Last_Name=Christopher, Date_Of_Birth=1990-02-16, e_mail=Rachel_Christopher.123@gmail.com, phone=9000054321}}
+
+
+package Connection;
+import org.bson.Document;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.model.Sorts;
+
+public class MongoDB {
+   public static void main(String[] args) {
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+      
+      MongoDatabase database = mongoClient.getDatabase("myDb");
+      
+      
+      // retrieving a collection
+      MongoCollection<Document> collection = database.getCollection("sampleCollection");
+      
+     
+     // allDocuments = collection.find().sort(new BasicDBObject("First_Name",1));
+      FindIterable<Document> allDocuments = collection.find().sort(new Document("First_Name", 1));
+      
+      for(Document document: allDocuments) {
+     	 System.out.println(document);
+      }
+      
+   }
+}
+
+OUTPUT:
+Document{{_id=6848341629aa397b4cb6c503, First_Name=Fathima, Last_Name=Sheik, Date_Of_Birth=1990-02-16, e_mail=Fathima_Sheik.123@gmail.com, phone=9000054321}}
+Document{{_id=6848341629aa397b4cb6c500, First_Name=Mahesh, Last_Name=Parashar, Date_Of_Birth=1990-08-21, e_mail=mahesh_parashar.123@gmail.com, phone=9034343345}}
+Document{{_id=6848341629aa397b4cb6c502, First_Name=Rachel, Last_Name=Christopher, Date_Of_Birth=1990-02-16, e_mail=Rachel_Christopher.123@gmail.com, phone=9000054321}}
+Document{{_id=6848341629aa397b4cb6c501, First_Name=Radhika, Last_Name=Sharma, Date_Of_Birth=1995-09-26, e_mail=radhika_sharma.123@gmail.com, phone=9000012345}}
+
+package Connection;
+import org.bson.Document;
+
+//import com.mongodb.BasicDBObject;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+//import com.mongodb.client.MongoIterable;
+//import com.mongodb.client.model.Filters;
+//import com.mongodb.client.model.Updates;
+import com.mongodb.client.model.Sorts;
+
+public class MongoDB {
+   public static void main(String[] args) {
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+      
+      MongoDatabase database = mongoClient.getDatabase("myDb");
+      
+      
+      // retrieving a collection
+      MongoCollection<Document> collection = database.getCollection("sampleCollection");
+      
+     
+     // allDocuments = collection.find().sort(new BasicDBObject("First_Name",1));
+      //FindIterable<Document> allDocuments = collection.find().sort(new Document("First_Name", 1));
+      FindIterable<Document> allDocuments = collection.find().sort(Sorts.descending("First_Name"));
+      for(Document document: allDocuments) {
+     	 System.out.println(document);
+      }
+      
+   }
+}
+
+OUTPUT:
+Document{{_id=6848341629aa397b4cb6c501, First_Name=Radhika, Last_Name=Sharma, Date_Of_Birth=1995-09-26, e_mail=radhika_sharma.123@gmail.com, phone=9000012345}}
+Document{{_id=6848341629aa397b4cb6c502, First_Name=Rachel, Last_Name=Christopher, Date_Of_Birth=1990-02-16, e_mail=Rachel_Christopher.123@gmail.com, phone=9000054321}}
+Document{{_id=6848341629aa397b4cb6c500, First_Name=Mahesh, Last_Name=Parashar, Date_Of_Birth=1990-08-21, e_mail=mahesh_parashar.123@gmail.com, phone=9034343345}}
+Document{{_id=6848341629aa397b4cb6c503, First_Name=Fathima, Last_Name=Sheik, Date_Of_Birth=1990-02-16, e_mail=Fathima_Sheik.123@gmail.com, phone=9000054321}}

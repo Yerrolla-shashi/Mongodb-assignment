@@ -1,0 +1,309 @@
+1. 
+PRISE RANGE 700-900
+
+###############   IN MONGODB #################
+
+db.products.find({
+  price: { $gte: 700, $lte: 900 }
+})
+
+OUTPUT:
+{
+  _id: 1,
+  name: 'xPhone',
+  price: 799,
+  releaseDate: 2011-05-14T00:00:00.000Z,
+  spec: {
+    ram: 4,
+    screen: 6.5,
+    cpu: 2.66
+  },
+  color: [
+    'white',
+    'black'
+  ],
+  storage: [
+    64,
+    128,
+    256
+  ]
+}
+{
+  _id: 2,
+  name: 'xTablet',
+  price: 899,
+  releaseDate: 2011-09-01T00:00:00.000Z,
+  spec: {
+    ram: 16,
+    screen: 9.5,
+    cpu: 3.66
+  },
+  color: [
+    'white',
+    'black',
+    'purple'
+  ],
+  storage: [
+    128,
+    256,
+    512
+  ]
+}
+{
+  _id: 3,
+  name: 'SmartTablet',
+  price: 899,
+  releaseDate: 2015-01-14T00:00:00.000Z,
+  spec: {
+    ram: 12,
+    screen: 9.7,
+    cpu: 3.66
+  },
+  color: [
+    'blue'
+  ],
+  storage: [
+    16,
+    64,
+    128
+  ]
+}
+
+
+###########      IN ECLIPSE        ##############
+ 
+package Connection;
+
+import com.mongodb.client.*;
+import org.bson.Document;
+import static com.mongodb.client.model.Filters.*;
+
+public class MongoDB {
+    public static void main(String[] args) {
+       
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+        
+        MongoDatabase database = mongoClient.getDatabase("fdb");
+        MongoCollection<Document> collection = database.getCollection("products");
+
+        
+        FindIterable<Document> result = collection.find(
+            and(gte("price", 700), lte("price", 900))
+        );
+
+        
+        for (Document doc : result) {
+            System.out.println(doc.toJson());
+        }
+
+        mongoClient.close();
+    }
+}
+
+OUTPUT:
+Jun 11, 2025 6:37:44 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Jun 11, 2025 6:37:45 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster description not yet available. Waiting for 30000 ms before timing out
+Jun 11, 2025 6:37:45 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:1, serverValue:24}] to localhost:27017
+Jun 11, 2025 6:37:45 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[8, 0, 9]}, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=4093901}
+Jun 11, 2025 6:37:45 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:2, serverValue:25}] to localhost:27017
+{"_id": 1, "name": "xPhone", "price": 799, "releaseDate": {"$date": 1305331200000}, "spec": {"ram": 4, "screen": 6.5, "cpu": 2.66}, "color": ["white", "black"], "storage": [64, 128, 256]}
+{"_id": 2, "name": "xTablet", "price": 899, "releaseDate": {"$date": 1314835200000}, "spec": {"ram": 16, "screen": 9.5, "cpu": 3.66}, "color": ["white", "black", "purple"], "storage": [128, 256, 512]}
+{"_id": 3, "name": "SmartTablet", "price": 899, "releaseDate": {"$date": 1421193600000}, "spec": {"ram": 12, "screen": 9.7, "cpu": 3.66}, "color": ["blue"], "storage": [16, 64, 128]}
+
+2. FIND AVG OF PRICE IN RANGE 700-900
+
+########### IN ECLIPSE ##########
+
+package Connection;
+
+import com.mongodb.client.*;
+import org.bson.Document;
+import static com.mongodb.client.model.Aggregates.*;
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Accumulators.*;
+
+import java.util.Arrays;
+
+public class MongoDB {
+    public static void main(String[] args) {
+        
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+        
+        MongoDatabase database = mongoClient.getDatabase("fdb");
+        MongoCollection<Document> collection = database.getCollection("products");
+
+        
+        AggregateIterable<Document> result = collection.aggregate(Arrays.asList(
+            match(and(gte("price", 700), lte("price", 900))),
+            group(null, avg("averagePrice", "$price"))
+        ));
+
+        
+        for (Document doc : result) {
+            System.out.println("Average Price (700–900): " + doc.getDouble("averagePrice"));
+        }
+
+        mongoClient.close();
+    }
+}
+
+OUTPUT:
+Jun 11, 2025 6:48:27 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Jun 11, 2025 6:48:27 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster description not yet available. Waiting for 30000 ms before timing out
+Jun 11, 2025 6:48:27 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:1, serverValue:26}] to localhost:27017
+Jun 11, 2025 6:48:27 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[8, 0, 9]}, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=4620900}
+Jun 11, 2025 6:48:28 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:2, serverValue:27}] to localhost:27017
+Average Price (700–900): 865.6666666666666
+
+
+################ IN MONGODB #######################
+
+
+db.products.aggregate([
+  {
+    $match: {
+      price: { $gte: 700, $lte: 900 }
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      averagePrice: { $avg: "$price" }
+    }
+  }
+])
+
+OUTPUT:
+
+{
+  _id: null,
+  averagePrice: 865.6666666666666
+}
+
+3. we have multiple items within different items, now each item which product is having more price, lets say id number 9 is max of Cappuccino product price, so print those.
+
+###############   MONGODB ##################
+
+db.sales.aggregate([
+  { $sort: { item: 1, price: -1 } },
+  {
+    $group: {
+      _id: "$item",
+      maxPrice: { $first: "$price" },
+      doc: { $first: "$$ROOT" }
+    }
+  },
+  {
+    $replaceRoot: { newRoot: "$doc" }
+  }
+])
+
+OUTPUT: 
+{
+  _id: 9,
+  item: 'Cappuccino',
+  price: 10,
+  size: 'Grande',
+  quantity: 17,
+  date: 2022-02-23T14:09:00.000Z
+}
+{
+  _id: 5,
+  item: 'Americanos',
+  price: 10,
+  size: 'Grande',
+  quantity: 12,
+  date: 2022-02-18T21:06:00.000Z
+}
+{
+  _id: 4,
+  item: 'Mochas',
+  price: 25,
+  size: 'Tall',
+  quantity: 11,
+  date: 2022-02-17T08:00:00.000Z
+}
+{
+  _id: 7,
+  item: 'Lattes',
+  price: 25,
+  size: 'Tall',
+  quantity: 30,
+  date: 2022-02-21T10:08:00.000Z
+}
+
+
+################ IN ECLIPSE  #####################
+
+package Connection;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.AggregateIterable;
+
+import static com.mongodb.client.model.Aggregates.*;
+import static com.mongodb.client.model.Sorts.*;
+import static com.mongodb.client.model.Accumulators.*;
+import static com.mongodb.client.model.Filters.*;
+
+import org.bson.Document;
+
+import java.util.Arrays;
+
+public class MongoDB {
+    public static void main(String[] args) {
+                MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+        
+        MongoDatabase db = mongoClient.getDatabase("fdb"); // Replace "fdb" with your actual DB name
+        MongoCollection<Document> sales = db.getCollection("sales");
+
+        
+        AggregateIterable<Document> result = sales.aggregate(Arrays.asList(
+            sort(orderBy(ascending("item"), descending("price"))),
+            group("$item",
+                first("maxPrice", "$price"),
+                first("doc", "$$ROOT")
+            ),
+            replaceRoot("$doc")
+        ));
+
+        
+        for (Document doc : result) {
+            System.out.println(doc.toJson());
+        }
+
+        
+        mongoClient.close();
+    }
+}
+
+
+OUTPUT:
+INFO: Cluster created with settings {hosts=[localhost:27017], mode=SINGLE, requiredClusterType=UNKNOWN, serverSelectionTimeout='30000 ms', maxWaitQueueSize=500}
+Jun 11, 2025 7:30:23 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Cluster description not yet available. Waiting for 30000 ms before timing out
+Jun 11, 2025 7:30:23 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:1, serverValue:28}] to localhost:27017
+Jun 11, 2025 7:30:23 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, state=CONNECTED, ok=true, version=ServerVersion{versionList=[8, 0, 9]}, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=6500500}
+Jun 11, 2025 7:30:23 PM com.mongodb.diagnostics.logging.JULLogger log
+INFO: Opened connection [connectionId{localValue:2, serverValue:29}] to localhost:27017
+{"_id": 5, "item": "Americanos", "price": 10, "size": "Grande", "quantity": 12, "date": {"$date": 1645218360000}}
+{"_id": 9, "item": "Cappuccino", "price": 10, "size": "Grande", "quantity": 17, "date": {"$date": 1645625340000}}
+{"_id": 7, "item": "Lattes", "price": 25, "size": "Tall", "quantity": 30, "date": {"$date": 1645438080000}}
+{"_id": 4, "item": "Mochas", "price": 25, "size": "Tall", "quantity": 11, "date": {"$date": 1645084800000}}
